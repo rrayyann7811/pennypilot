@@ -2,6 +2,8 @@
 
 **Personal Finance Management System**
 
+**Live demo:** [https://pennypilot-mauve.vercel.app/](https://pennypilot-mauve.vercel.app/)
+
 PennyPilot is a responsive, local-first finance dashboard built with React and JavaScript. Track income and expenses, plan monthly budgets, explore financial trends, and keep downloadable backups—all without an account or backend.
 
 ## Features
