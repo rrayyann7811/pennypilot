@@ -1,42 +1,10 @@
-function TransactionList({ transactions, onDelete, onClearAll }) {
-    return (
-      <div className="card">
-        <div className="list-header">
-          <h2>Transaction History</h2>
-          <button className="clear-btn" onClick={onClearAll}>
-            Clear All
-          </button>
-        </div>
-  
-        {transactions.length === 0 ? (
-          <p>No transactions added yet.</p>
-        ) : (
-          <div className="transaction-list">
-            {transactions.map((item) => (
-              <div key={item.id} className="transaction-item">
-                <div>
-                  <h4>{item.title}</h4>
-                  <p>
-                    {item.category} | {item.date}
-                  </p>
-                </div>
-  
-                <div className="transaction-right">
-                  <span
-                    className={
-                      item.type === "income" ? "income-text" : "expense-text"
-                    }
-                  >
-                    {item.type === "income" ? "+" : "-"} ₹ {item.amount}
-                  </span>
-                  <button onClick={() => onDelete(item.id)}>Delete</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-  
-  export default TransactionList;
+import { formatMoney, validDate } from '../utils/finance';
+function TransactionList({ transactions, totalCount, filters, setFilters, onEdit, onDelete, onClearAll }) {
+  const change = event => setFilters({ ...filters, [event.target.name]: event.target.value });
+  return <section className="card transaction-history-card"><div className="list-header"><h2>Transaction History</h2><button className="clear-btn" onClick={onClearAll} disabled={!totalCount}>Clear All</button></div>
+    <div className="filters"><label>Search titles<input type="search" name="search" value={filters.search} onChange={change} /></label><label>Type<select name="type" value={filters.type} onChange={change}><option value="">All types</option><option value="income">Income</option><option value="expense">Expense</option></select></label><label>Month<input type="month" name="month" value={filters.month} onChange={change} /></label><label>Sort<select name="sort" value={filters.sort} onChange={change}><option value="newest">Date: newest first</option><option value="oldest">Date: oldest first</option><option value="highest">Amount: highest first</option><option value="lowest">Amount: lowest first</option></select></label><button onClick={() => setFilters({ search: '', type: '', month: '', sort: 'newest' })}>Reset Filters</button></div>
+    <p className="result-count" role="status">{transactions.length} of {totalCount} transactions</p>
+    {!transactions.length ? <p>{totalCount ? 'No transactions match your filters.' : 'No transactions added yet. Add your first income or expense.'}</p> : <div className="transaction-list">{transactions.map(item => <article key={item.id} className="transaction-item"><div><h3>{item.title}</h3><p>{item.type === 'income' ? 'Income' : 'Expense'} | {validDate(item.date) ? item.date.split('-').reverse().join('/') : `${item.date} (date needs review)`}</p></div><div className="transaction-right"><span className={item.type === 'income' ? 'income-text' : 'expense-text'}>{item.type === 'income' ? '+' : '−'} {formatMoney(item.amountPaise)}</span><button className="edit-btn" aria-label={`Edit ${item.title}`} onClick={() => onEdit(item)}>Edit</button><button aria-label={`Delete ${item.title}`} onClick={() => onDelete(item.id)}>Delete</button></div></article>)}</div>}
+  </section>;
+}
+export default TransactionList;

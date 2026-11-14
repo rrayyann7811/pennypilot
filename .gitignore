@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+coverage/
+.vercel/
+
+# Downloaded financial exports and local working artifacts
+pennypilot-backup-*.json
+pennypilot-transactions-*.csv
+*.tmp
+*.temp
+*.swp
+*~
+._*
+/qa-artifacts/
